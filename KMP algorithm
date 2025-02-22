@@ -1,0 +1,51 @@
+class Solution {
+  public:
+    
+    void computatinLPS(string &pat,vector<int>&LPS){
+        int len=0;
+        LPS[0]=0;
+        int i=1;
+        while(i<pat.length()){
+            if(pat[i]==pat[len]){
+                len++;
+                LPS[i]=len;
+                i++;
+            }
+            else{
+                if(len!=0){
+                    len=LPS[len-1];
+                } else{
+                    LPS[i]=0;
+                    i++;
+                }
+            }
+        }
+    }
+    vector<int> search(string& pat, string& txt) {
+        // code here
+        int patLen=pat.length(),txtLen=txt.length();
+        vector<int>result;
+        vector<int>LPS(patLen,0);
+        computatinLPS(pat,LPS);
+        int i=0,j=0;
+        while(i<txtLen){
+            if(txt[i]==pat[j]){
+                i++;
+                j++;
+            }
+            if(j==patLen){
+                result.push_back(i-patLen);
+                j=LPS[j-1];
+            }
+            if(txt[i]!=pat[j]){
+                if(j!=0){
+                    j=LPS[j-1];
+                }
+                else{
+                    i++;
+                }
+            }
+        }
+        return result;
+    }
+};
